@@ -1,0 +1,6 @@
+name: LibertSSAM
+version: '${project.version}'
+main: libert.saehyeon.ssam.LibertSSAM
+api-version: '1.16'
+authors: [세현]
+description: 리버트 1.5 육망성 결투 4회차 [ 젊어지는 샘 ] 플러그인
