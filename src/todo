@@ -10,8 +10,8 @@
     [x] /tower list 으로 타워 목록 출력하도록 하기
 
 [x] 기지 이동 시스템
-    [x] GUI에 플레이어가 속한 스코어보드 팀의 이름이 getOriginOwner와 같은 타워로 워프할 수 있도록 아이템 배치하기
-    [x] TowerWarp에 canWarpToTakenTower가 true라면, getOriginOwner 떠는 getCurrentTower가 같은 타워를 아이템으로 배치하기
+    [x] TowerWarp.canWarpToTakenTower가 false일 때: [getOriginOwner == getCurrentOwner && getCurrentOwner == 플레이어의 팀 이름] 인 타워를 배치
+    [x] TowerWarp.canWarpToTakenTower가 true일 때: [getOriginOwner != getCurrentOwner && getCurrentOwner == 플레이어의 팀 이름] 인 타워도 추가로 배치
     [x] 타워 아이템을 클릭하면 워프하고, 인벤토리 닫히게 하기
 
 [x] 테스트: 타이머
@@ -20,5 +20,5 @@
     [x] 전투 시간이 끝나면 즉시 작전 시간으로 넘어가지는 지 확인하기
     [x] 전투 시간 중 아무런 탑도 점령되지 않았을 경우, 자신이 점령한 타워로 워프할 수 있는 지 확인
 
-[x] Debug.log에서 출력하는 메세지는 Config.DEBUG가 true일 때만 하도록 하기
-    [x] Config.DEBUG는 Command에서 DEBUG 값을 토글 가능하도록 만들기 (/ssam debug)
+[v] Debug.log에서 출력하는 메세지는 Config.DEBUG가 true일 때만 하도록 하기
+    [v] Config.DEBUG는 Command에서 DEBUG 값을 토글 가능하도록 만들기 (/ssam debug)

@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="unnamed">
-    <output-path>H:/마인크래프트/버킷/리버트/1.16.5 육망성 결투 4회/plugins</output-path>
-    <root id="archive" name="unnamed.jar">
-      <element id="module-output" name="ssam" />
-    </root>
-  </artifact>
-</component>

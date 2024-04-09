@@ -93,6 +93,9 @@ public class GameTimer {
         if(!isAnyTowerDown) {
             Debug.log("전투 시간 동안 어떠한 타워도 점령되지 않음. 이제부터 각 팀은 서로가 점령한 타워로 워프할 수 있음.");
             TowerWarp.canWarpToTakenTower = true;
+        } else {
+            Debug.log("전투 시간 동안 1개 이상의 타워가 점령되었으므로 다시 각 팀은 서로 점령한 타워로 워프할 수 없음.");
+            TowerWarp.canWarpToTakenTower = false;
         }
 
         // 전투 시간 동안 탑이 점령되었는 지 여부 초기회
@@ -120,7 +123,7 @@ public class GameTimer {
         int leftSecond = leftTick / 20;
 
         StringBuilder sb = new StringBuilder("지금은 §c§l전투 시간§f입니다!");
-        sb.append("§f (").append(leftSecond).append(")");
+        sb.append("§f (").append(leftSecond+1).append(")");
 
         return sb.toString();
     }
@@ -133,7 +136,7 @@ public class GameTimer {
         int leftSecond = leftTick / 20;
 
         StringBuilder sb = new StringBuilder("지금은 §6§l작전 시간§f입니다!");
-        sb.append("§f (").append(leftSecond).append(")");
+        sb.append("§f (").append(leftSecond+1).append(")");
 
         return sb.toString();
     }
@@ -142,7 +145,7 @@ public class GameTimer {
      * 전투 시간 시작
      */
     public static void startCombatTime() {
-
+        Bukkit.broadcastMessage("combat-time");
         cancelTask();
 
         String title = getCombatTimeTitle();
@@ -150,16 +153,15 @@ public class GameTimer {
         if(bar == null) {
             bar = Bukkit.createBossBar(title, BarColor.RED, BarStyle.SOLID);
             Debug.log("보스바가 등록되어 있지 않았으므로 보스바를 자동으로 등록했음.");
-        } else {
-            bar.setTitle(title);
-            bar.setColor(BarColor.RED);
-            bar.setStyle(BarStyle.SOLID);
         }
 
+        bar.setTitle(title);
+        bar.setColor(BarColor.RED);
+        bar.setStyle(BarStyle.SOLID);
         bar.setProgress(1);
         showBarAll();
 
-        maxTick    = Config.COMBAT_TIME_TICK;
+        maxTick    = LibertSSAM.config.COMBAT_TIME_TICK;
         leftTick   = maxTick;
         timeType   = GameTimeType.COMBAT_TIME;
 
@@ -183,20 +185,22 @@ public class GameTimer {
         if(bar == null) {
             bar = Bukkit.createBossBar(title, color, style);
             Debug.log("보스바가 등록되어 있지 않았으므로 보스바를 자동으로 등록했음.");
-        } else {
-            bar.setTitle(title);
-            bar.setColor(color);
-            bar.setStyle(style);
         }
 
+        bar.setTitle(title);
+        bar.setColor(color);
+        bar.setStyle(style);
         bar.setProgress(1);
         showBarAll();
 
-        maxTick    = Config.OPR_TIME_TICK;
+        maxTick    = LibertSSAM.config.OPR_TIME_TICK;
         leftTick   = maxTick;
         timeType   = GameTimeType.OPR_TIME;
 
         startTask();
+
+        // 모든 플레이어를 각 팀의 전초 기지로 보내기
+        Bukkit.getOnlinePlayers().forEach(GameTeam::teleportToSpawn);
 
         Debug.log("작전 시간 시작");
     }
@@ -220,10 +224,7 @@ public class GameTimer {
      * 타이머 중지
      */
     public static void stop() {
-        if(task != null) {
-            task.cancel();
-            task = null;
-        }
+        cancelTask();
 
         leftTick = 0;
         maxTick  = 0;
@@ -231,6 +232,17 @@ public class GameTimer {
         if(bar != null) {
             bar.setTitle("§6§l게임이 종료되었습니다!");
             bar.setProgress(0);
+        }
+    }
+
+    public static void clear() {
+        cancelTask();
+
+        leftTick = 0;
+        maxTick  = 0;
+
+        if(bar != null) {
+            bar.removeAll();
         }
     }
 }
