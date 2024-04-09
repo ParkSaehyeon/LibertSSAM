@@ -24,7 +24,7 @@ public class TabComplete implements TabCompleter {
             if(strings.length == 2) {
                 switch(strings[0]) {
                     case "info":
-                        return TowerManager.towers.stream().map(t -> t.name).collect(Collectors.toList());
+                        return TowerManager.getTowerNameList();
                 }
             }
         }
@@ -34,7 +34,26 @@ public class TabComplete implements TabCompleter {
         }
 
         if(s.equals("ssam.api")) {
-            return Arrays.asList("점령","시작");
+
+            if(strings.length == 1) {
+                return Arrays.asList("점령","시작");
+            }
+
+            if(strings.length == 2) {
+                if(strings[0].equals("점령")) {
+                    return TowerManager.getTowerNameList();
+                }
+            }
+
+            if(strings.length == 3 || strings.length == 4) {
+                if(strings[0].equals("점령")) {
+                    return Arrays.asList("red","blue");
+                }
+            }
+        }
+
+        if(s.equals("타이머")) {
+            return Arrays.asList("전투시간","작전시간");
         }
         return null;
     }

@@ -51,6 +51,10 @@ public class TowerManager {
         return findTower(towerName, team, true);
     }
 
+    public static List<String> getTowerNameList() {
+        return TowerManager.towers.stream().map(t -> t.name).collect(Collectors.toList());
+    }
+
     public static void commit() {
         String str = Serialize.serialize(towers);
         FileUtil.writeFile(LibertSSAM.config.TOWER_CONFIG, str);

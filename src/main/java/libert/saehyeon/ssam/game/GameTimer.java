@@ -145,7 +145,6 @@ public class GameTimer {
      * 전투 시간 시작
      */
     public static void startCombatTime() {
-        Bukkit.broadcastMessage("combat-time");
         cancelTask();
 
         String title = getCombatTimeTitle();
@@ -217,7 +216,9 @@ public class GameTimer {
         });
     }
     public static void showBar(Player p) {
-        bar.addPlayer(p);
+        if(bar != null) {
+            bar.addPlayer(p);
+        }
     }
 
     /**

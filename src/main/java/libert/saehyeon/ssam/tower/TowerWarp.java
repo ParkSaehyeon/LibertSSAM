@@ -1,5 +1,6 @@
 package libert.saehyeon.ssam.tower;
 
+import libert.saehyeon.ssam.Debug;
 import libert.saehyeon.ssam.LibertSSAM;
 import libert.saehyeon.ssam.game.GameTeam;
 import org.bukkit.Bukkit;
@@ -30,7 +31,7 @@ public class TowerWarp {
 
         p.openInventory(inv);
 
-        Bukkit.broadcastMessage("canWarpToTakenTower:"+canWarpToTakenTower);
+        Debug.log("현재 점령한 다른 팀의 탑으로 워프할 수 있는 가?: "+canWarpToTakenTower);
 
         int index = 0;
 

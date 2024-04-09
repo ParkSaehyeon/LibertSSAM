@@ -4,6 +4,7 @@ import libert.saehyeon.ssam.Debug;
 import libert.saehyeon.ssam.LibertSSAM;
 import libert.saehyeon.ssam.game.GameTeam;
 import libert.saehyeon.ssam.game.GameTimer;
+import libert.saehyeon.ssam.game.InGameListener;
 import libert.saehyeon.ssam.tower.Tower;
 import libert.saehyeon.ssam.tower.TowerManager;
 import libert.saehyeon.ssam.tower.TowerWarp;
@@ -96,7 +97,7 @@ public class Command implements CommandExecutor {
             }
         }
 
-        if(s.equals("spawn")) {
+        if(s.equals("전초기지")) {
 
             Player p = (Player) commandSender;
 
@@ -119,6 +120,36 @@ public class Command implements CommandExecutor {
 
             } catch (Exception e) {
                 p.sendMessage("§c사용법: /spawn [팀 이름]");
+            }
+        }
+
+        if(s.equals("타이머")) {
+
+            Player p = (Player) commandSender;
+
+            try {
+
+                int sec;
+
+                switch(strings[0]) {
+                    case "전투시간":
+                        sec = Integer.parseInt(strings[1]);
+                        LibertSSAM.config.COMBAT_TIME_TICK = sec * 20;
+                        LibertSSAM.broadcast("전투 시간이 §7"+sec+"초("+(sec*20)+" tick)§f으로 설정되었습니다.");
+                        break;
+
+                    case "작전시간":
+                        sec = Integer.parseInt(strings[1]);
+                        LibertSSAM.config.OPR_TIME_TICK = sec * 20;
+                        LibertSSAM.broadcast("작전 시간이 §7"+sec+"초("+(sec*20)+" tick)§f으로 설정되었습니다.");
+                        break;
+
+                    default:
+                        p.sendMessage("§c올바르지 않은 명령입니다. 플러그인 메뉴얼을 참고하세요.");
+                        break;
+                }
+            } catch (Exception e) {
+                p.sendMessage("§c올바르지 않은 명령입니다. 플러그인 메뉴얼을 참고하세요.");
             }
         }
 
@@ -147,7 +178,7 @@ public class Command implements CommandExecutor {
 
             switch(strings[0]) {
                 case "시작":
-                    GameTimer.startCombatTime();
+                    InGameListener.onGameStart();
                     break;
 
                 case "점령":
@@ -157,16 +188,7 @@ public class Command implements CommandExecutor {
                         String towerTeam = strings[2];
                         String newTeam   = strings[3];
 
-                        Debug.log("커맨드 블럭에서 탑이 점령됐다고 알려줌. 점령된 타워는 본래 §7"+towerTeam+"§f 팀의 소유이며 타워의 이름은 §7"+towerName+"§f. 해당 타워를 점령한 팀 이름은 §7"+newTeam+"§f임.");
-
-                        Tower targetTower = TowerManager.findTower(towerName, towerTeam);
-
-                        if(targetTower != null) {
-                            targetTower.setOwner(newTeam);
-                        }
-
-                        // 작전 시간 시작
-                        GameTimer.startOprTime();
+                        InGameListener.onTowerTaken(towerName, towerTeam, newTeam);
 
                     } else {
                         Bukkit.broadcastMessage("§c점령에 대한 요청이 올바르지 않습니다. (사용법: ssam.api 점령 [타워 이름] [타워 초기 소유 팀 이름] [점령한 팀 이름]");

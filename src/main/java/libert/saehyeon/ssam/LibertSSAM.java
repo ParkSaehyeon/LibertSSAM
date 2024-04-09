@@ -2,6 +2,7 @@ package libert.saehyeon.ssam;
 
 import libert.saehyeon.ssam.command.Command;
 import libert.saehyeon.ssam.command.TabComplete;
+import libert.saehyeon.ssam.event.ConnectEvent;
 import libert.saehyeon.ssam.event.DeathEvent;
 import libert.saehyeon.ssam.event.Event;
 import libert.saehyeon.ssam.event.InventoryEvent;
@@ -27,20 +28,24 @@ public final class LibertSSAM extends JavaPlugin {
         getDataFolder().mkdir();
         Config.load();
 
-        Bukkit.getPluginCommand("tower")     .setExecutor(new Command());
-        Bukkit.getPluginCommand("warp")      .setExecutor(new Command());
-        Bukkit.getPluginCommand("spawn")     .setExecutor(new Command());
+        Bukkit.getPluginCommand("tower").setExecutor(new Command());
+        Bukkit.getPluginCommand("warp").setExecutor(new Command());
+        Bukkit.getPluginCommand("전초기지").setExecutor(new Command());
+        Bukkit.getPluginCommand("타이머").setExecutor(new Command());
         Bukkit.getPluginCommand("ssam-debug").setExecutor(new Command());
-        Bukkit.getPluginCommand("ssam.api")  .setExecutor(new Command());
+        Bukkit.getPluginCommand("ssam.api").setExecutor(new Command());
 
-        Bukkit.getPluginCommand("tower")     .setTabCompleter(new TabComplete());
-        Bukkit.getPluginCommand("warp")      .setTabCompleter(new TabComplete());
+        Bukkit.getPluginCommand("tower").setTabCompleter(new TabComplete());
+        Bukkit.getPluginCommand("warp").setTabCompleter(new TabComplete());
+        Bukkit.getPluginCommand("전초기지").setTabCompleter(new TabComplete());
+        Bukkit.getPluginCommand("타이머").setTabCompleter(new TabComplete());
         Bukkit.getPluginCommand("ssam-debug").setTabCompleter(new TabComplete());
-        Bukkit.getPluginCommand("ssam.api")  .setTabCompleter(new TabComplete());
+        Bukkit.getPluginCommand("ssam.api").setTabCompleter(new TabComplete());
 
         Bukkit.getPluginManager().registerEvents(new InventoryEvent(), this);
         Bukkit.getPluginManager().registerEvents(new DeathEvent(), this);
         Bukkit.getPluginManager().registerEvents(new Event(), this);
+        Bukkit.getPluginManager().registerEvents(new ConnectEvent(), this);
 
         TowerManager.load();
 
@@ -55,7 +60,7 @@ public final class LibertSSAM extends JavaPlugin {
     public void onDisable() {
 
         GameTimer.clear();
-        LibertSSAM.config.save();
+        Config.save();
     }
 
     public static void log(Level level, String message) {
