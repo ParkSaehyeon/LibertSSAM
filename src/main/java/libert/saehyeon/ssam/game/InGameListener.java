@@ -17,7 +17,8 @@ public class InGameListener {
         }
 
         GameTeam.init();
-        GameTimer.startCombatTime();
+        //GameTimer.startCombatTime();
+        GameTimer.startOprTime(true);
     }
 
     public static void onTowerTaken(String towerName, String towerTeam, String newTeam) {
@@ -39,7 +40,31 @@ public class InGameListener {
             return;
         }
 
-        // 5초후 작전 시간 시작
-        GameTimer.startOprTimeDelay(5*20);
+        // 전투 시간 끝내기
+        GameTimer.onCombatTimeEnd(false);
+
+        /*   5초후 작전 시간 시작  */
+
+        // 게임 일시중지
+        GameTimer.pause = true;
+
+        // 5초 대기하고 있다고 설정
+        GameTimer.isOprWaiting = true;
+
+        // 기존의 oprTimeDelayTask 취소
+        GameTimer.cancelOprTimeDelayTask();
+
+        Bukkit.getScheduler().runTaskLater(LibertSSAM.ins, () -> {
+
+            // 작전 시간 시작
+            GameTimer.startOprTime(false);
+
+            // 타이머 일시중지 해제
+            GameTimer.pause = false;
+
+            // 5초 대기 끝
+            GameTimer.isOprWaiting = false;
+
+        },20*5);
     }
 }

@@ -19,8 +19,11 @@ public class GameTimer {
     private static int maxTick;
 
     private static BukkitTask task;
-    private static BukkitTask oprTimeDelayTask;
+    public static BukkitTask oprTimeDelayTask;
     public static GameTimeType timeType;
+
+    /**  타워 점령 후, 작전 시간이 되는 5초를 대기 중인지 여부  */
+    public static boolean isOprWaiting = false;
     public static boolean pause = false;
 
     /**
@@ -49,7 +52,7 @@ public class GameTimer {
 
                 // 전투 시간이 끝남
                 if(timeType == GameTimeType.COMBAT_TIME) {
-                    onCombatTimeEnd();
+                    onCombatTimeEnd(true);
                 }
 
                 // 작전 시간이 끝남
@@ -93,8 +96,8 @@ public class GameTimer {
     /**
      * 전투 시간 종료
      */
-    private static void onCombatTimeEnd() {
-        Debug.log("전투 시간이 종료됨.");
+    public static void onCombatTimeEnd(boolean startOprTime) {
+        Debug.log("전투 시간이 종료됨. (전투 시간 동안 점령된 탑이 있는 가?: "+isAnyTowerDown+")");
 
         if(!isAnyTowerDown) {
             Debug.log("전투 시간 동안 어떠한 타워도 점령되지 않음. 이제부터 각 팀은 서로가 점령한 타워로 워프할 수 있음.");
@@ -107,8 +110,10 @@ public class GameTimer {
         // 전투 시간 동안 탑이 점령되었는 지 여부 초기회
         isAnyTowerDown = false;
 
-        // 작전 시간 시작
-        startOprTime();
+        if(startOprTime) {
+            // 작전 시간 시작
+            startOprTime(false);
+        }
     }
 
     /**
@@ -182,36 +187,12 @@ public class GameTimer {
         }
     }
 
-    public static void startOprTimeDelay(int delay) {
-
-        if(delay == 0) {
-            startOprTime();
-        } else {
-
-            // 타이머 일시중지
-            GameTimer.pause = true;
-
-            // 기존의 oprTimeDelayTask 취소
-            cancelOprTimeDelayTask();
-
-            oprTimeDelayTask = Bukkit.getScheduler().runTaskLater(LibertSSAM.ins, () -> {
-
-                startOprTime();
-
-                // 타이머 일시중지 해제
-                GameTimer.pause = false;
-
-            }, delay);
-        }
-    }
-
     /**
      * 작전 시간 시작
      */
-    public static void startOprTime() {
+    public static void startOprTime(boolean isGameStart) {
 
         cancelTask();
-
 
         String title = getOprTimeTitle();
 
@@ -229,7 +210,20 @@ public class GameTimer {
         bar.setProgress(1);
         showBarAll();
 
-        maxTick    = LibertSSAM.config.OPR_TIME_TICK;
+        // 게임 시작 시, 첫 작전 시간은 3분
+        if(isGameStart) {
+
+            // 디버그일때는 3분 -> 13초
+            if(LibertSSAM.config.DEBUG) {
+                maxTick = 13*20;
+            } else {
+                maxTick = 3*60*20;
+            }
+
+        } else {
+            maxTick = LibertSSAM.config.OPR_TIME_TICK;
+        }
+
         leftTick   = maxTick;
         timeType   = GameTimeType.OPR_TIME;
 

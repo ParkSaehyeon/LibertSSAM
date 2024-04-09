@@ -2,10 +2,7 @@ package libert.saehyeon.ssam;
 
 import libert.saehyeon.ssam.command.Command;
 import libert.saehyeon.ssam.command.TabComplete;
-import libert.saehyeon.ssam.event.ConnectEvent;
-import libert.saehyeon.ssam.event.DeathEvent;
-import libert.saehyeon.ssam.event.Event;
-import libert.saehyeon.ssam.event.InventoryEvent;
+import libert.saehyeon.ssam.event.*;
 import libert.saehyeon.ssam.game.GameTeam;
 import libert.saehyeon.ssam.game.GameTimer;
 import libert.saehyeon.ssam.tower.Tower;
@@ -47,6 +44,9 @@ public final class LibertSSAM extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new DeathEvent(), this);
         Bukkit.getPluginManager().registerEvents(new Event(), this);
         Bukkit.getPluginManager().registerEvents(new ConnectEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new ItemEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new DamageEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new BlockEvent(), this);
 
         TowerManager.load();
 

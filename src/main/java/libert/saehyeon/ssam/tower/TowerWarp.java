@@ -88,6 +88,7 @@ public class TowerWarp {
 
         if(targetTower != null) {
             player.teleport(targetTower.location);
+            player.setBedSpawnLocation(targetTower.location, true);
             player.closeInventory();
         } else {
             Bukkit.broadcastMessage("§c"+player.getName()+"(이)가 기지 이동 GUI에서 타워를 클릭하였으나 해당 타워는 존재하지 않습니다. (타워 이름: "+itemName+", 팀 이름: "+teamName+")");
