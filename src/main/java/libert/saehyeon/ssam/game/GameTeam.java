@@ -43,6 +43,10 @@ public class GameTeam {
     public static void teleportToSpawn(Player player) {
         String teamName = GameTeam.getTeam(player);
 
+        if(teamName == null) {
+            return;
+        }
+
         if(teamName.equals("red")) {
             player.teleport(LibertSSAM.config.RED_SPAWN);
         }
