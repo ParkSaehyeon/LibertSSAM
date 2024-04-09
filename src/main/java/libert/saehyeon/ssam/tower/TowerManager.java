@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TowerManager {
+    public static int RED_TAKEN_TOWER = 0;
+    public static int BLUE_TAKEN_TOWER = 0;
     public static List<Tower> towers = new ArrayList<>();
 
     public static void removeTower(String towerName, String ownTeam) {

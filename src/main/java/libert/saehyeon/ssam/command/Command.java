@@ -2,8 +2,6 @@ package libert.saehyeon.ssam.command;
 
 import libert.saehyeon.ssam.Debug;
 import libert.saehyeon.ssam.LibertSSAM;
-import libert.saehyeon.ssam.game.DropItemClear;
-import libert.saehyeon.ssam.game.GameTeam;
 import libert.saehyeon.ssam.game.GameTimer;
 import libert.saehyeon.ssam.game.InGameListener;
 import libert.saehyeon.ssam.tower.Tower;
@@ -11,7 +9,6 @@ import libert.saehyeon.ssam.tower.TowerManager;
 import libert.saehyeon.ssam.tower.TowerWarp;
 import libert.saehyeon.ssam.util.LocUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -184,11 +181,9 @@ public class Command implements CommandExecutor {
                     break;
 
                 case "준비완료":
-                    Bukkit.getOnlinePlayers().forEach(p -> {
-                        if(p.getGameMode() == GameMode.ADVENTURE) {
-                            TowerWarp.openGUI(p);
-                        }
-                    });
+                    Debug.log("준비완료됨");
+                    GameTimer.startCombatTime();
+                    TowerWarp.requestSelect();
                     break;
 
                 case "점령":
@@ -228,8 +223,8 @@ public class Command implements CommandExecutor {
             TowerManager.load();
             Debug.log(" -> 타워를 초기 상태로 변경");
 
-            DropItemClear.start();
-            Debug.log(" -> 땅에 떨어진 아이템 제거");
+            TowerManager.BLUE_TAKEN_TOWER = 0;
+            TowerManager.RED_TAKEN_TOWER = 0;
         }
 
         return false;

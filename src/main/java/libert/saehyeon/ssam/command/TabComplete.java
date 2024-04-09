@@ -36,7 +36,7 @@ public class TabComplete implements TabCompleter {
         if(s.equals("ssam.api")) {
 
             if(strings.length == 1) {
-                return Arrays.asList("점령","시작");
+                return Arrays.asList("점령","시작","준비완료");
             }
 
             if(strings.length == 2) {

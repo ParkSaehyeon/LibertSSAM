@@ -5,6 +5,9 @@ import libert.saehyeon.ssam.LibertSSAM;
 import libert.saehyeon.ssam.tower.Tower;
 import libert.saehyeon.ssam.tower.TowerManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.entity.Player;
 
 public class InGameListener {
     public static void onGameStart() {
@@ -37,6 +40,60 @@ public class InGameListener {
             targetTower.setOwner(newTeam);
         } else {
             Bukkit.broadcastMessage("§c본래 "+towerTeam+" 팀 소유인 탑 '"+towerName+"' 탑을 찾을 수 없습니다. §c§l§u커맨드 블럭에서 서버에 등록된 탑의 이름으로 점령 정보으로 플러그인에 요청하고 있는 지 확인하십시오.");
+            return;
+        }
+
+        // newTeam의 타워 +1
+        if(newTeam.equals("red")) {
+            TowerManager.RED_TAKEN_TOWER++;
+        }
+
+        else if(newTeam.equals("blue")) {
+            TowerManager.BLUE_TAKEN_TOWER++;
+        }
+
+        // 게임 종료 확인
+        String winTeam = "";
+
+        if(TowerManager.RED_TAKEN_TOWER >= 3 && TowerManager.BLUE_TAKEN_TOWER >= 3) {
+            winTeam = "draw";
+        }
+
+        else if(TowerManager.RED_TAKEN_TOWER >= 3) {
+            winTeam = "red";
+        }
+
+        else if(TowerManager.BLUE_TAKEN_TOWER >= 3) {
+            winTeam = "blue";
+
+        }
+
+        // 이긴 팀 처리
+        if(!winTeam.isEmpty()) {
+            Debug.log("게임 종료: "+winTeam+" (3개 이상의 탑이 점령됨)");
+
+            String title = "§f§l무승부!";
+
+            if(winTeam.equals("red")) {
+                title = "§c§l레드팀 승리!";
+            }
+
+            else if(winTeam.equals("blue")) {
+                title = "§b§l블루팀 승리!";
+            }
+
+            for(Player p2 : Bukkit.getOnlinePlayers()) {
+
+                p2.sendTitle(title, "§f게임이 종료되었어요.");
+                p2.playSound(p2.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.MASTER, 0.5f,1);
+
+            }
+
+            // 모두를 스폰으로 TP
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tp @a -1 71 6");
+
+            // 종료 호출
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "종료");
             return;
         }
 

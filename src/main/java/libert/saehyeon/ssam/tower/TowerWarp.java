@@ -5,14 +5,19 @@ import libert.saehyeon.ssam.LibertSSAM;
 import libert.saehyeon.ssam.game.GameTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 public class TowerWarp {
 
-    public static boolean isNoSelectNoClose = false;
+    public static ArrayList<UUID> noSelectNoClose = new ArrayList<>();
+
 
     /**
      * 점령한 탑으로 이동할 수 있는 지 여부. (false일 경우 점령한 탑으로 이동 불가)
@@ -89,13 +94,29 @@ public class TowerWarp {
         Tower targetTower = TowerManager.findTowerByOriginTeam(towerName, teamName);
 
         if(targetTower != null) {
+
+            // 필수 선택 플레이어 목록에서 삭제
+            noSelectNoClose.remove(player.getUniqueId());
+
             player.teleport(targetTower.location);
             player.setBedSpawnLocation(targetTower.location, true);
             player.closeInventory();
+
         } else {
             Bukkit.broadcastMessage("§c"+player.getName()+"(이)가 기지 이동 GUI에서 타워를 클릭하였으나 해당 타워는 존재하지 않습니다. (타워 이름: "+itemName+", 팀 이름: "+teamName+")");
         }
 
     }
 
+    public static void requestSelect() {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if(p.getGameMode() == GameMode.ADVENTURE) {
+                TowerWarp.openGUI(p);
+
+                if(!noSelectNoClose.contains(p.getUniqueId())) {
+                    noSelectNoClose.add(p.getUniqueId());
+                }
+            }
+        }
+    }
 }
