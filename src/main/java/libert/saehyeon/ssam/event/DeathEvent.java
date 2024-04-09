@@ -30,7 +30,7 @@ public class DeathEvent implements Listener {
     @EventHandler
     void onRespawn(PlayerRespawnEvent e) {
         Bukkit.getScheduler().runTaskLater(LibertSSAM.ins, () -> {
-            e.getPlayer().setHealth(20);
+            e.getPlayer().setHealth(e.getPlayer().getMaxHealth());
         },2);
     }
 }

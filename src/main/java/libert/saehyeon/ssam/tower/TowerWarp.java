@@ -12,6 +12,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class TowerWarp {
 
+    public static boolean isNoSelectNoClose = false;
+
     /**
      * 점령한 탑으로 이동할 수 있는 지 여부. (false일 경우 점령한 탑으로 이동 불가)
      */

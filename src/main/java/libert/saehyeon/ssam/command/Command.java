@@ -11,6 +11,7 @@ import libert.saehyeon.ssam.tower.TowerManager;
 import libert.saehyeon.ssam.tower.TowerWarp;
 import libert.saehyeon.ssam.util.LocUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -180,6 +181,14 @@ public class Command implements CommandExecutor {
             switch(strings[0]) {
                 case "시작":
                     InGameListener.onGameStart();
+                    break;
+
+                case "준비완료":
+                    Bukkit.getOnlinePlayers().forEach(p -> {
+                        if(p.getGameMode() == GameMode.ADVENTURE) {
+                            TowerWarp.openGUI(p);
+                        }
+                    });
                     break;
 
                 case "점령":
