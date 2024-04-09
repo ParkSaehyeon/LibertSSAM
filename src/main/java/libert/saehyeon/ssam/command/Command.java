@@ -2,6 +2,7 @@ package libert.saehyeon.ssam.command;
 
 import libert.saehyeon.ssam.Debug;
 import libert.saehyeon.ssam.LibertSSAM;
+import libert.saehyeon.ssam.game.DropItemClear;
 import libert.saehyeon.ssam.game.GameTeam;
 import libert.saehyeon.ssam.game.GameTimer;
 import libert.saehyeon.ssam.game.InGameListener;
@@ -207,6 +208,19 @@ public class Command implements CommandExecutor {
                     Bukkit.broadcastMessage(err.toString());
                     break;
             }
+        }
+
+        if(s.equals("종료")) {
+            Debug.log("종료 작업 시작:");
+
+            GameTimer.clear();
+            Debug.log(" -> 타이머 종료");
+
+            TowerManager.load();
+            Debug.log(" -> 타워를 초기 상태로 변경");
+
+            DropItemClear.start();
+            Debug.log(" -> 땅에 떨어진 아이템 제거");
         }
 
         return false;

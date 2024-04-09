@@ -19,7 +19,9 @@ public class GameTimer {
     private static int maxTick;
 
     private static BukkitTask task;
+    private static BukkitTask oprTimeDelayTask;
     public static GameTimeType timeType;
+    public static boolean pause = false;
 
     /**
      * 탑이 점령되었다면 이 값을 true로 설정하여 전투 시간 동안 탑이 점령되었음을 의미
@@ -34,6 +36,10 @@ public class GameTimer {
         cancelTask();
 
         task = Bukkit.getScheduler().runTaskTimer(LibertSSAM.ins, () -> {
+
+            if(pause) {
+                return;
+            }
 
             if(--leftTick > 0) {
 
@@ -169,12 +175,43 @@ public class GameTimer {
         Debug.log("전투 시간 시작");
     }
 
+    public static void cancelOprTimeDelayTask() {
+        if(oprTimeDelayTask != null) {
+            oprTimeDelayTask.cancel();
+            oprTimeDelayTask = null;
+        }
+    }
+
+    public static void startOprTimeDelay(int delay) {
+
+        if(delay == 0) {
+            startOprTime();
+        } else {
+
+            // 타이머 일시중지
+            GameTimer.pause = true;
+
+            // 기존의 oprTimeDelayTask 취소
+            cancelOprTimeDelayTask();
+
+            oprTimeDelayTask = Bukkit.getScheduler().runTaskLater(LibertSSAM.ins, () -> {
+
+                startOprTime();
+
+                // 타이머 일시중지 해제
+                GameTimer.pause = false;
+
+            }, delay);
+        }
+    }
+
     /**
      * 작전 시간 시작
      */
     public static void startOprTime() {
 
         cancelTask();
+
 
         String title = getOprTimeTitle();
 
@@ -239,11 +276,21 @@ public class GameTimer {
     public static void clear() {
         cancelTask();
 
+        // oprTimeDelayTask cancel하기
+        if(oprTimeDelayTask != null) {
+            oprTimeDelayTask.cancel();
+            oprTimeDelayTask = null;
+        }
+
         leftTick = 0;
         maxTick  = 0;
+        task = null;
+
+        isAnyTowerDown = false;
 
         if(bar != null) {
             bar.removeAll();
+            bar = null;
         }
     }
 }

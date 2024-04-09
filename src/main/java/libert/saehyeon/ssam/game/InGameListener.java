@@ -1,6 +1,7 @@
 package libert.saehyeon.ssam.game;
 
 import libert.saehyeon.ssam.Debug;
+import libert.saehyeon.ssam.LibertSSAM;
 import libert.saehyeon.ssam.tower.Tower;
 import libert.saehyeon.ssam.tower.TowerManager;
 import org.bukkit.Bukkit;
@@ -8,6 +9,13 @@ import org.bukkit.Bukkit;
 public class InGameListener {
     public static void onGameStart() {
         Debug.log("[커맨드 → 플러그인] 게임 시작");
+
+        if(LibertSSAM.config.DEBUG) {
+            Debug.log("");
+            Debug.log("§c§l※ 디버그 모드가 켜져있음! 개발 환경이 아니라면 §f§l/ssam-debug§c§l를 입력하여 해제하시오! ※");
+            Debug.log("");
+        }
+
         GameTeam.init();
         GameTimer.startCombatTime();
     }
@@ -18,7 +26,7 @@ public class InGameListener {
 
         // 자신들이 점령한 탑을 자신들이 점령하려고 하고 있음.
         if(towerTeam.equals(newTeam)) {
-            Bukkit.broadcastMessage("§c본래 "+towerTeam+" 소유의 "+towerName+" 탑을 "+newTeam+" 팀이 점령하도록 요청받았습니다. 같은 팀의 탑을 같은 팀이 점령할 수 없습니다. 커맨드 블럭의 명령어를 수정하세요.");
+            Bukkit.broadcastMessage("§c본래 "+towerTeam+" 소유의 "+towerName+" 탑을 "+newTeam+" 팀이 점령하도록 요청받았습니다. §c§l§u같은 팀의 탑을 같은 팀이 점령할 수 없습니다. §c커맨드 블럭의 명령어를 수정하세요.");
             return;
         }
 
@@ -27,11 +35,11 @@ public class InGameListener {
         if(targetTower != null) {
             targetTower.setOwner(newTeam);
         } else {
-            Bukkit.broadcastMessage("§c점령 오류: 본래 "+towerTeam+" 팀 소유인 탑 '"+towerName+"' 탑을 찾을 수 없습니다. 커맨드 블럭에서 서버에 등록된 탑의 이름으로 점령 정보으로 플러그인에 요청하고 있는 지 확인하십시오.");
+            Bukkit.broadcastMessage("§c본래 "+towerTeam+" 팀 소유인 탑 '"+towerName+"' 탑을 찾을 수 없습니다. §c§l§u커맨드 블럭에서 서버에 등록된 탑의 이름으로 점령 정보으로 플러그인에 요청하고 있는 지 확인하십시오.");
             return;
         }
 
-        // 작전 시간 시작
-        GameTimer.startOprTime();
+        // 5초후 작전 시간 시작
+        GameTimer.startOprTimeDelay(5*20);
     }
 }

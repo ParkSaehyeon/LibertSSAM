@@ -43,7 +43,7 @@ public class Tower implements Serializable {
      */
     public void setOwner(String teamName) {
         if(firstOwnTeam.equals(teamName)) {
-            Bukkit.broadcastMessage("§c본래 "+firstOwnTeam+" 팀이 소유 중이었으며 "+ownTeam+" 팀이 현재 점령 중인 "+name+" 탑을 "+firstOwnTeam+" 팀이 재 탈환되었습니다. 재 탈환을 방지하는 장치가 마련되어 있는 지 확인하세요. 점령 작업을 취소했습니다.");
+            Bukkit.broadcastMessage("§c본래 "+firstOwnTeam+" 팀이 소유 중이었으며 "+ownTeam+" 팀이 현재 점령 중인 "+name+" 탑을 "+firstOwnTeam+" 팀이 재 탈환합니다. 재 탈환을 방지하는 장치가 마련되어 있는 지 확인하세요. 점령 작업을 취소했습니다.");
             return;
         }
 

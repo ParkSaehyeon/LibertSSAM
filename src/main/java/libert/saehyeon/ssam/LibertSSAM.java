@@ -32,6 +32,7 @@ public final class LibertSSAM extends JavaPlugin {
         Bukkit.getPluginCommand("warp").setExecutor(new Command());
         Bukkit.getPluginCommand("전초기지").setExecutor(new Command());
         Bukkit.getPluginCommand("타이머").setExecutor(new Command());
+        Bukkit.getPluginCommand("종료").setExecutor(new Command());
         Bukkit.getPluginCommand("ssam-debug").setExecutor(new Command());
         Bukkit.getPluginCommand("ssam.api").setExecutor(new Command());
 
