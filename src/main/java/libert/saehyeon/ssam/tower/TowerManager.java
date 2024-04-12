@@ -80,5 +80,4 @@ public class TowerManager {
             Bukkit.broadcastMessage("§cTower 클래스 구조가 변경되었기 때문에 현재 저장된 탑 정보를 가져오지 못했습니다. 타워 설정을 다시해야합니다.");
         }
     }
-
 }

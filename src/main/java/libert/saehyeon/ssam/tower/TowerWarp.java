@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -58,7 +59,8 @@ public class TowerWarp {
             );
 
             if(flag) {
-                p.getOpenInventory().getTopInventory().setItem(index++, tower.toItem());
+
+                p.getOpenInventory().getTopInventory().setItem(index++, getWarpItem(tower));
             }
         }
     }
@@ -118,5 +120,31 @@ public class TowerWarp {
                 }
             }
         }
+    }
+
+    public static ItemStack getWarpItem(Tower tower) {
+        ItemStack oldItem = tower.toItem();
+
+        if(oldItem != null && oldItem.getItemMeta() != null && oldItem.getItemMeta().getDisplayName() != null) {
+
+            ItemMeta oldMeta = oldItem.getItemMeta();
+
+            ItemStack warpItem = new ItemStack(oldItem.getType());
+            ItemMeta meta = warpItem.getItemMeta();
+
+            meta.setDisplayName(oldMeta.getDisplayName());
+            meta.setLore(oldMeta.getLore());
+            meta.setCustomModelData(1000+(TowerManager.towers.indexOf(tower)+1));
+
+            for(ItemFlag flag : oldMeta.getItemFlags()) {
+                meta.addItemFlags(flag);
+            }
+
+            warpItem.setItemMeta(meta);
+
+            return warpItem;
+        }
+
+        return null;
     }
 }

@@ -12,6 +12,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class Command implements CommandExecutor {
 
@@ -73,6 +75,15 @@ public class Command implements CommandExecutor {
                     } catch (Exception e) {
                         p.sendMessage("§c사용법: /tower info [타워 이름] [현재 소유 중인 팀 이름]");
                     }
+                    break;
+
+                case "get-items":
+                    for(Tower tower : TowerManager.towers) {
+
+                        p.getInventory().addItem( TowerWarp.getWarpItem(tower) );
+                    }
+
+                    p.sendMessage("§f모든 탑 워프 아이템을 지급했습니다.");
                     break;
 
                 /*  타워 목록  */

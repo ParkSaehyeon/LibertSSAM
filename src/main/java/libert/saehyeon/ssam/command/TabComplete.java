@@ -18,7 +18,7 @@ public class TabComplete implements TabCompleter {
         if(s.equals("tower")) {
 
             if(strings.length == 1) {
-                return Arrays.asList("set","remove","info","list","commit");
+                return Arrays.asList("set","remove","info","list","commit", "get-items");
             }
 
             if(strings.length == 2) {
